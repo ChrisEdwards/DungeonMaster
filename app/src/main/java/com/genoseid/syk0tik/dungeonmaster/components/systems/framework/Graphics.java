@@ -11,10 +11,12 @@ public interface Graphics {
 	public static enum ImageFormat {
 		ARGB8888, ARGB4444, RGB565
 	}
+	
+	public void setView();
 
 	public Image newImage(String fileName, ImageFormat format);
 
-	public void drawMap(Map map, int x, int y);
+	public void drawMap(Map map);
 
 	public void drawEntities(EntityMap entities);
 
