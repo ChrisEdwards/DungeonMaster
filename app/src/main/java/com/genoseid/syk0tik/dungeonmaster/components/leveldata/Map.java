@@ -1,14 +1,6 @@
 package com.genoseid.syk0tik.dungeonmaster.components.leveldata;
 
-
-
-
-
 import java.util.Random;
-
-
-
-
 
 public class Map {
 
@@ -48,9 +40,9 @@ public class Map {
 		}
 
 	}
-
-	public void render() {
-
+	
+	public Tile getTile(int xLoc, int yLoc) {
+		
 	}
 
 }
