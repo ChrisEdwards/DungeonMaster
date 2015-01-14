@@ -36,13 +36,15 @@ public class Map {
 	public void update() {
 		for (Tile tile : tiles) {
 			tile.update();
-
 		}
 
 	}
 	
 	public Tile getTile(int xLoc, int yLoc) {
-		
+		if(xLoc < 0 || yLoc < 0 || xLoc >= width || yLoc >= height || tiles[xLoc + Locy * width] == null) {
+			return Tile.voidTile;
+		}
+		return (tiles[xLoc + yLoc * width];
 	}
 
 }
