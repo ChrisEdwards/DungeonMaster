@@ -17,11 +17,12 @@ public class Graphics implements com.genoseid.syk0tik.dungeonmaster.components.s
 
 	public GameActivity parent;
 
-	Bitmap frameBuffer;
-	Canvas canvas;
-	Paint paint;
-	Rect srcRect = new Rect();
-	Rect dstRect = new Rect();
+	private Bitmap frameBuffer;
+	private Canvas canvas;
+	private Paint paint;
+	private Rect srcRect = new Rect();
+	private Rect dstRect = new Rect();
+	private int xView, yView;
 
 	public Graphics(GameActivity parent, Bitmap frameBuffer) {
 		this.parent = parent;
@@ -30,25 +31,51 @@ public class Graphics implements com.genoseid.syk0tik.dungeonmaster.components.s
 		this.paint = new Paint();
 
 	}
-
+	
 	@Override
-	public void drawMap(Map map, int x, int y) {
-		for (int xPos = 0; xPos < map.width; xPos++) {
-			for (int yPos = 0; yPos < map.height; yPos++) {
-				if (map.tiles[xPos + yPos * map.width] == null) {
-					canvas.drawBitmap(Sprite.voidSprite.bmp, xPos * map.scale, yPos * map.scale, paint);
-				} else {
-					canvas.drawBitmap(map.tiles[xPos + yPos * map.width].sprite.bmp, xPos * map.scale, yPos * map.scale, paint);
-				}
+	public void setView(int xView, int yView) {
+		this.xView = xView;
+		this.yView = yView;
+	}
+
+
+	/* !TODO!
+	** Play around with the x1 and y1 values to make
+	** sure we're not drawing too far out of bounds
+	*/
+	// Cycles and draws through visible tiles
+	@Override
+	public void drawMap(Map map) {
+		
+		// Set screen bounds
+		int x0 = xView >> 4;
+		int x1 = (xView + frameBufferWidth + 16) >> 4;
+		int y0 = yView >> 4;
+		int y1 = (yView + frameBufferHeight + 16) >> 4;
+		
+		for(int yLoc = y0; yLoc < y1; yLoc++) {
+			for(int xLoc = x0; xLoc < x1; xLoc++) {
+				drawTile(map.getTile(xLoc, yLoc), xLoc << 4, yLoc << 4);
 			}
 		}
 	}
 
 	@Override
-	public void drawEntities(EntityMap entities) {}
+	public void drawEntities(EntityMap entities) {
+		
+	}
 
 	@Override
-	public void drawPlayer(Player player) {}
+	public void drawPlayer(Player player) {
+		
+	}
+	
+	@Override
+	public void drawTile(Tile tile, int xLoc, int yLoc) {
+		xLoc -= xView;
+		yLoc -= yView;
+		canvas.drawBitmap(tile.sprite.bmp, xLoc, yLoc);
+	}
 
 	@Override
 	public void drawLine(int x, int y, int x2, int y2, int color) {
