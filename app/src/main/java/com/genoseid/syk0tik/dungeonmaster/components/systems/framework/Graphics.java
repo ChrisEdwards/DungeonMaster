@@ -12,7 +12,7 @@ public interface Graphics {
 		ARGB8888, ARGB4444, RGB565
 	}
 	
-	public void setView();
+	public void setView(int xView, int yView);
 
 	public Image newImage(String fileName, ImageFormat format);
 
