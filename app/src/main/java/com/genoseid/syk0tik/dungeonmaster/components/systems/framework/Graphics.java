@@ -21,6 +21,8 @@ public interface Graphics {
 	public void drawEntities(EntityMap entities);
 
 	public void drawPlayer(Player player);
+	
+	public void drawTile(Tile tile, int xLoc, int yLoc);
 
 	public void drawLine(int x, int y, int x2, int y2, int color);
 
