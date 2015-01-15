@@ -1,14 +1,9 @@
 package com.genoseid.syk0tik.dungeonmaster.components.leveldata;
 
-
-
-
+import com.genoseid.syk0tik.dungeonmaster.components.entities.EntityMap;
+import com.genoseid.syk0tik.dungeonmaster.components.entities.Player;
 
 import java.util.Random;
-
-
-
-
 
 public class Map {
 
@@ -41,16 +36,19 @@ public class Map {
 		}
 	}
 
-	public void update() {
+	public void update(Player player, EntityMap entities) {
 		for (Tile tile : tiles) {
 			tile.update();
-
 		}
 
 	}
 
-	public void render() {
-
+	// Returns tile at given location
+	public Tile getTile(int xLoc, int yLoc) {
+		if(xLoc < 0 || yLoc < 0 || xLoc >= width || yLoc >= height || tiles[xLoc + yLoc * width] == null) {
+			return Tile.voidTile;
+		}
+		return tiles[xLoc + yLoc * width];
 	}
 
 }

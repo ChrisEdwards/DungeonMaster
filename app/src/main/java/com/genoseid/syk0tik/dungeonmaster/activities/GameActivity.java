@@ -57,11 +57,11 @@ public class GameActivity extends Activity {
 		float scaleY = (float) frameBufferHeight / displaymetrics.heightPixels;
 
 		// Initialize components
-		graphics = new Graphics(this, frameBuffer);
+		view = new ViewThread(this, frameBuffer);
+		graphics = new Graphics(this, frameBuffer, frameBufferWidth, frameBufferHeight);
 		audio = new Audio(this);
 		controls = new Controls(this, scaleX, scaleY);
 		handler = new LevelHandler(this);
-		view = new ViewThread(this, frameBuffer);
 		setContentView(view);
 
 	}

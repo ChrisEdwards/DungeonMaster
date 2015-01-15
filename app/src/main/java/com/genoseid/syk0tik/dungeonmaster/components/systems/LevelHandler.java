@@ -26,12 +26,13 @@ public class LevelHandler {
 	private int xView, yView;
 
 	public LevelHandler(GameActivity parent) {
+
 		this.parent = parent;
 		level = new Map(64, 64, 16);
 		level.generateLevel();
 
 		entities = new EntityMap(64, 64);
-		player = new Player();
+		player = new Player(1, 1);
 
 		paint = new Paint();
 		paint.setTextSize(30);
@@ -53,17 +54,24 @@ public class LevelHandler {
 
 	}
 
-	private void updateLoading() {}
+	private void updateLoading() {
 
-	private void updateMenu(List<TouchEvent> touchEvents) {}
+	}
+
+	private void updateMenu(List<TouchEvent> touchEvents) {
+
+	}
 
 	private void updateReady(List<TouchEvent> touchEvents) {
+
 		if (touchEvents.size() > 0) state = GameState.Running;
 	}
 
 	private void updateRunning(List<TouchEvent> touchEvents) {
 
-
+		player.update(level, entities, touchEvents);
+		level.update(player, entities);
+		entities.update(player, level);
 	}
 
 	private void updatePaused(List<TouchEvent> touchEvents) {
@@ -73,9 +81,10 @@ public class LevelHandler {
 	}
 
 	private void updateGameOver(List<TouchEvent> touchEvents) {
+
 		for (int i = 0; i < touchEvents.size(); i++) {
-			Controls.TouchEvent event = touchEvents.get(i);
-			if (event.type == Controls.TouchEvent.TOUCH_UP) {
+			TouchEvent event = touchEvents.get(i);
+			if (event.type == TouchEvent.TOUCH_UP) {
 				if (event.x > 300 && event.x < 980 && event.y > 100 && event.y < 500) {
 					clear();
 					state = GameState.Menu;
@@ -86,17 +95,18 @@ public class LevelHandler {
 	}
 
 	private void updateCamera() {
+
 		xView = 0;
 		yView = 0;
 	}
 
 	public void pause() {
-		if (state == GameState.Running)
-			state = GameState.Paused;
+
+		if (state == GameState.Running) state = GameState.Paused;
 
 	}
 
-	public void paint() {
+	public void render() {
 
 		if (state == GameState.Ready) drawReadyUI();
 		if (state == GameState.Running) drawRunningUI();
@@ -106,6 +116,7 @@ public class LevelHandler {
 	}
 
 	private void drawReadyUI() {
+
 		Graphics g = parent.graphics;
 
 		g.drawARGB(155, 0, 0, 0);
@@ -117,10 +128,11 @@ public class LevelHandler {
 
 		Graphics g = parent.graphics;
 
-		g.drawMap(level, xView, yView);
+		g.drawMap(level);
 	}
 
 	private void drawPausedUI() {
+
 		Graphics g = parent.graphics;
 
 		g.drawARGB(155, 0, 0, 0);
@@ -128,6 +140,7 @@ public class LevelHandler {
 	}
 
 	private void drawGameOverUI() {
+
 		Graphics g = parent.graphics;
 
 		g.drawRect(0, 0, 1281, 801, Color.BLACK);
@@ -138,9 +151,7 @@ public class LevelHandler {
 	private void clear() {
 
 		paint = null;
-
 		System.gc();
-
 	}
 
 }
