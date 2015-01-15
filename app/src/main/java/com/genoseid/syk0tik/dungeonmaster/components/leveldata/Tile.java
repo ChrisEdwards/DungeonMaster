@@ -2,7 +2,6 @@ package com.genoseid.syk0tik.dungeonmaster.components.leveldata;
 
 public class Tile {
 
-	public static Tile wall, grass, rock;
 	public int x, y;
 	public Sprite sprite;
 	public boolean collidable;

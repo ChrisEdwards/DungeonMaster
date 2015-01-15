@@ -13,7 +13,8 @@ import com.genoseid.syk0tik.dungeonmaster.components.systems.*;
 
 public class GameActivity extends Activity {
 
-	public ViewThread view;
+	public View view;
+	public WorkThread thread;
 	public Graphics graphics;
 	public Audio audio;
 	public Controls controls;
@@ -57,26 +58,30 @@ public class GameActivity extends Activity {
 		float scaleY = (float) frameBufferHeight / displaymetrics.heightPixels;
 
 		// Initialize components
-		view = new ViewThread(this, frameBuffer);
+		thread = new WorkThread(this, frameBuffer);
+		view = new View(this);
 		graphics = new Graphics(this, frameBuffer, frameBufferWidth, frameBufferHeight);
-		audio = new Audio(this);
 		controls = new Controls(this, scaleX, scaleY);
 		handler = new LevelHandler(this);
 		setContentView(view);
 
 	}
 
+	public void startGame(View view) {
+		thread.start(view);
+	}
+
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		view.start();
+		thread.start(view);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		view.stop();
+		thread.stop();
 		handler.pause();
 	}
 

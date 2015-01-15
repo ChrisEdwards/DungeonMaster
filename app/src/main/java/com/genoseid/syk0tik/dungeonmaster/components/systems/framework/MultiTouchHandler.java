@@ -1,13 +1,13 @@
 package com.genoseid.syk0tik.dungeonmaster.components.systems.framework;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.genoseid.syk0tik.dungeonmaster.components.systems.framework.*;
 import com.genoseid.syk0tik.dungeonmaster.components.systems.framework.Controls.TouchEvent;
+import com.genoseid.syk0tik.dungeonmaster.components.systems.framework.Pool.PoolObjectFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiTouchHandler implements TouchHandler {
 
@@ -18,28 +18,34 @@ public class MultiTouchHandler implements TouchHandler {
 	int[] touchY = new int[MAX_TOUCHPOINTS];
 	int[] id = new int[MAX_TOUCHPOINTS];
 	Pool<TouchEvent> touchEventPool;
-	List<TouchEvent> touchEvents = new ArrayList<TouchEvent>();
-	List<TouchEvent> touchEventsBuffer = new ArrayList<TouchEvent>();
+	List<TouchEvent> touchEvents = new ArrayList<>();
+	List<TouchEvent> touchEventsBuffer = new ArrayList<>();
 	float scaleX;
 	float scaleY;
 
 	public MultiTouchHandler(View view, float scaleX, float scaleY) {
-		Pool.PoolObjectFactory<TouchEvent> factory = new Pool.PoolObjectFactory<TouchEvent>() {
+
+		PoolObjectFactory<TouchEvent> factory = new PoolObjectFactory<TouchEvent>() {
+
+			@Override
 			public TouchEvent createObject() {
+
 				return new TouchEvent();
 			}
 		};
-		touchEventPool = new Pool<TouchEvent>(factory, 100);
+		touchEventPool = new Pool<>(factory, 100);
 		view.setOnTouchListener(this);
 
 		this.scaleX = scaleX;
 		this.scaleY = scaleY;
 	}
 
+	@Override
 	public boolean onTouch(View v, MotionEvent event) {
+
 		synchronized (this) {
 			int action = event.getAction() & MotionEvent.ACTION_MASK;
-			int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+			int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_MASK;
 			int pointerCount = event.getPointerCount();
 			TouchEvent touchEvent;
 			for (int i = 0; i < MAX_TOUCHPOINTS; i++) {
@@ -96,37 +102,39 @@ public class MultiTouchHandler implements TouchHandler {
 		}
 	}
 
+	@Override
 	public boolean isTouchDown(int pointer) {
+
 		synchronized (this) {
 			int index = getIndex(pointer);
-			if (index < 0 || index >= MAX_TOUCHPOINTS)
-				return false;
-			else
-				return isTouched[index];
+			if (index < 0 || index >= MAX_TOUCHPOINTS) return false;
+			else return isTouched[index];
 		}
 	}
 
+	@Override
 	public int getTouchX(int pointer) {
+
 		synchronized (this) {
 			int index = getIndex(pointer);
-			if (index < 0 || index >= MAX_TOUCHPOINTS)
-				return 0;
-			else
-				return touchX[index];
+			if (index < 0 || index >= MAX_TOUCHPOINTS) return 0;
+			else return touchX[index];
 		}
 	}
 
+	@Override
 	public int getTouchY(int pointer) {
+
 		synchronized (this) {
 			int index = getIndex(pointer);
-			if (index < 0 || index >= MAX_TOUCHPOINTS)
-				return 0;
-			else
-				return touchY[index];
+			if (index < 0 || index >= MAX_TOUCHPOINTS) return 0;
+			else return touchY[index];
 		}
 	}
 
+	@Override
 	public List<TouchEvent> getTouchEvents() {
+
 		synchronized (this) {
 			int len = touchEvents.size();
 			for (int i = 0; i < len; i++)
@@ -140,6 +148,7 @@ public class MultiTouchHandler implements TouchHandler {
 
 	// returns the index for a given pointerId or -1 if no index.
 	private int getIndex(int pointerId) {
+
 		for (int i = 0; i < MAX_TOUCHPOINTS; i++) {
 			if (id[i] == pointerId) {
 				return i;

@@ -38,6 +38,7 @@ public class SaveData {
 
 	// Saves game to array then to preferences, returns true if not enough space overwrite declined
 	public boolean saveGame() {
+
 		if (activeGameNumber == savedGames.length) {
 			for (int position = 0; position < savedGames.length; position++) {
 				if (savedGames[position] == null) {
@@ -55,6 +56,7 @@ public class SaveData {
 	}
 
 	private void writeProcess() {
+
 		savedGames[activeGameNumber] = activeGame;
 		StringBuilder writeString = new StringBuilder();
 		SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
