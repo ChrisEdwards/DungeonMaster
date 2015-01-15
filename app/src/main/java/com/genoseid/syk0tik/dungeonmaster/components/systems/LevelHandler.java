@@ -62,8 +62,9 @@ public class LevelHandler {
 	}
 
 	private void updateRunning(List<TouchEvent> touchEvents) {
-
-
+		player.update(level, entities, touchEvents);
+		level.update(player, entities);
+		entities.update(player, level);
 	}
 
 	private void updatePaused(List<TouchEvent> touchEvents) {
@@ -74,8 +75,8 @@ public class LevelHandler {
 
 	private void updateGameOver(List<TouchEvent> touchEvents) {
 		for (int i = 0; i < touchEvents.size(); i++) {
-			Controls.TouchEvent event = touchEvents.get(i);
-			if (event.type == Controls.TouchEvent.TOUCH_UP) {
+			TouchEvent event = touchEvents.get(i);
+			if (event.type == TouchEvent.TOUCH_UP) {
 				if (event.x > 300 && event.x < 980 && event.y > 100 && event.y < 500) {
 					clear();
 					state = GameState.Menu;
